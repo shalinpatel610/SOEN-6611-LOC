@@ -28,11 +28,10 @@ public class FileCount {
             File[] contents = directory.listFiles();
             assert contents != null;
             /*
-                Content of file
+                Content of folder
              */
             for (File f : contents) {
                 if (f.isFile()) {
-                    //System.out.println(f.getAbsolutePath());
                     /*
                         Check for extension of file
                      */

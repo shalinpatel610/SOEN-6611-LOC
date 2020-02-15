@@ -9,7 +9,7 @@
     </properties>
 
     <groupId>com.shalin.sm</groupId>
-    <artifactId>assignment-1</artifactId>
+    <artifactId>assignment</artifactId>
     <version>1.0</version>
     <build>
         <plugins>
