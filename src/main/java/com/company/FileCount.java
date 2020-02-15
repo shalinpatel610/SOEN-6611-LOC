@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class FileCount {
 
     int javaFiles = 0, uniqueJavaFiles = 0, blankLines = 0, commentLines = 0, codeLines = 0;
-    ArrayList<File> fileContent = new ArrayList<File>();
+    ArrayList<File> fileContent = new ArrayList<>();
 
     public void init(String folder) throws IOException {
         listFiles(folder);
@@ -42,7 +42,6 @@ public class FileCount {
                         extension = f.getName().substring(i+1);
                         if (extension.endsWith("java")){
                             javaFiles++;
-
                             /*
                                 Check for duplicate files
                              */
@@ -53,14 +52,12 @@ public class FileCount {
                                 e.printStackTrace();
                             }
                             if (isDuplicate){
-                                //System.out.println("File Duplicate");
+
                             } else{
                                 uniqueJavaFiles++;
-
                                 /*
                                     Check for blank lines
                                  */
-
                                 BufferedReader br = new BufferedReader(new FileReader(f.getPath()));
                                 String line;
                                 while ((line = br.readLine()) != null) {
@@ -72,9 +69,28 @@ public class FileCount {
                                          */
                                         if (line.trim().startsWith("//")){
                                             commentLines++;
-                                        } else if (line.trim().startsWith("/*")){
+                                        } else if (line.trim().startsWith("/*") && line.trim().endsWith("*/")){
+                                            commentLines++;
+                                        } else if (line.trim().startsWith("/*") && line.trim().contains("*/") && !line.trim().endsWith("*/")){
+                                            codeLines++;
+                                        } else if(line.trim().startsWith("/*") && !line.trim().contains("*/")){
                                             commentLines++;
                                             while (!line.trim().contains("*/") && !(line = br.readLine()).trim().contains("*/")){
+                                                commentLines++;
+                                            }
+                                            if (line.trim().contains("*/") && !line.trim().endsWith("*/")){
+                                                codeLines++;
+                                            } else {
+                                                commentLines++;
+                                            }
+                                        } else if (line.contains("/*") && !line.trim().startsWith("/*")){
+                                            if (line.contains("*/")){
+                                                codeLines++;
+                                            } else {
+                                                codeLines++;
+                                                while (!line.trim().contains("*/") && !(line = br.readLine()).trim().contains("*/")){
+                                                    commentLines++;
+                                                }
                                                 commentLines++;
                                             }
                                         } else {
@@ -90,6 +106,8 @@ public class FileCount {
                 }
             }
         } else if (directory.isFile()){
+            javaFiles++;
+            uniqueJavaFiles++;
             /*
                 Check for extension of file
              */
@@ -101,7 +119,6 @@ public class FileCount {
                     /*
                         Check for blank lines
                      */
-
                     BufferedReader br = new BufferedReader(new FileReader(directory.getPath()));
                     String line;
                     while ((line = br.readLine()) != null) {
@@ -112,13 +129,29 @@ public class FileCount {
                                 Check for commented lines
                              */
                             if (line.trim().startsWith("//")){
-                                //System.out.println(line);
                                 commentLines++;
-                            } else if (line.trim().startsWith("/*")){
-                                //System.out.println(line);
+                            } else if (line.trim().startsWith("/*") && line.trim().endsWith("*/")){
+                                commentLines++;
+                            } else if (line.trim().startsWith("/*") && line.trim().contains("*/") && !line.trim().endsWith("*/")){
+                                codeLines++;
+                            } else if(line.trim().startsWith("/*") && !line.trim().contains("*/")){
                                 commentLines++;
                                 while (!line.trim().contains("*/") && !(line = br.readLine()).trim().contains("*/")){
-                                    //System.out.println(line);
+                                    commentLines++;
+                                }
+                                if (line.trim().contains("*/") && !line.trim().endsWith("*/")){
+                                    codeLines++;
+                                } else {
+                                    commentLines++;
+                                }
+                            } else if (line.contains("/*") && !line.trim().startsWith("/*")){
+                                if (line.contains("*/")){
+                                    codeLines++;
+                                } else {
+                                    codeLines++;
+                                    while (!line.trim().contains("*/") && !(line = br.readLine()).trim().contains("*/")){
+                                        commentLines++;
+                                    }
                                     commentLines++;
                                 }
                             } else {
@@ -136,10 +169,8 @@ public class FileCount {
         if (fileContent.size() != 0) {
             for (File file : fileContent) {
                 if (Files.mismatch(Paths.get(file.getPath()), Paths.get(f.getPath())) != -1){
-                    //System.out.println("File Content Not Same");
                     isDuplicate = false;
                 } else {
-                    //System.out.println("File Content Same");
                     isDuplicate = true;
                     break;
                 }
@@ -152,9 +183,6 @@ public class FileCount {
     }
 
     public static void main(String[] args) throws IOException {
-        //System.out.println("Directory Path: "+args[0]);
         new FileCount().init(args[0]);
     }
-
 }
-
