@@ -39,7 +39,7 @@ public class FileCount {
                     int i = f.getName().lastIndexOf('.');
                     if (i > 0) {
                         extension = f.getName().substring(i+1);
-                        if (extension.endsWith("java")){
+                        if (extension.equals("java")){
                             javaFiles++;
                             /*
                                 Check for duplicate files
@@ -114,7 +114,7 @@ public class FileCount {
             int i = directory.getName().lastIndexOf('.');
             if (i > 0) {
                 extension = directory.getName().substring(i+1);
-                if (extension.endsWith("java")){
+                if (extension.equals("java")){
                     /*
                         Check for blank lines
                      */

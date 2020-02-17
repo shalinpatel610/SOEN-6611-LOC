@@ -1,12 +1,5 @@
-/* HelloWorld.java'
- *
- *
- *
- * Finish comment
+/* HelloWorld.java
  */
-
-/*
-hello*/
 
 public class HelloWorld
 {
